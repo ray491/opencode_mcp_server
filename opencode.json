@@ -7,6 +7,13 @@
         "python3",
         "/app/mcp_server.py"
       ]
+    },
+    "odoo_python_mcp_server": {
+      "type": "local",
+      "command": [
+        "python3",
+        "/app/odoo_python_mcp_server/server.py"
+      ]
     }
   }
 }
