@@ -25,13 +25,14 @@ RUN sed -i 's|http://deb.debian.org|https://deb.debian.org|g' /etc/apt/sources.l
 
 RUN python3 -m pip install --no-cache-dir mcp playwright aiohttp httpx --break-system-packages \
     && playwright install --with-deps
+
 RUN npm i -g opencode-ai
 
 WORKDIR /app
 
 COPY mcp_server.py /app/mcp_server.py
 COPY opencode.json /app/opencode.json
-COPY odoo_mcp/python_server /app/odoo_mcp_server
+COPY odoo_python_mcp_server /app/odoo_python_mcp_server
 
 RUN mkdir -p /root/.config/opencode \
     && cp /app/opencode.json /root/.config/opencode/opencode.json
