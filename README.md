@@ -23,12 +23,12 @@ This project combines:
 
 ### 1. Build
 ```bash
-docker run -d \
 docker build -t opencode-browser-mcp .
 ```
 
 ### 2. Run
 ```bash
+docker run -d \
   -p 4096:4096 \
   -p 80:80 \
   -p 22:22 \
@@ -59,10 +59,10 @@ System parameters (optional):
 - `mcp.require_auth` (default 1) requires login+api_key on every request
 - `mcp.default_deny` (default 1) denies any model not listed in MCP Access
 
-### 2) Run the Python MCP server
+### 2) Run the Python MCP server (local)
 
 ```bash
-cd odoo_mcp/python_server
+cd odoo_python_mcp_server
 python -m pip install -r requirements.txt
 set ODOO_BASE_URL=http://localhost:8069
 set ODOO_DB=your_db_name
@@ -70,6 +70,26 @@ set ODOO_MCP_TOKEN=your-secret
 set ODOO_LOGIN=your_odoo_login
 set ODOO_API_KEY=your_odoo_api_key
 python server.py
+```
+
+### 3) Run the Odoo MCP server in Docker
+
+The Docker image already includes `odoo_python_mcp_server` and reads its settings from env vars.
+Start the container and pass Odoo credentials as secrets at runtime:
+
+```bash
+docker run -d \
+  -p 4096:4096 \
+  -p 80:80 \
+  -p 22:22 \
+  -e ODOO_BASE_URL=http://odoo:8069 \
+  -e ODOO_DB=your_db_name \
+  -e ODOO_MCP_TOKEN=your-secret \
+  -e ODOO_LOGIN=your_odoo_login \
+  -e ODOO_API_KEY=your_odoo_api_key \
+  --name opencode \
+  opencode-browser-mcp
+```
 ```
 
 ## SFTP access
@@ -154,6 +174,11 @@ DELETE http://localhost/recordings
 | `MCP_HEADLESS`  | `false`            | Run browser in headless mode             |
 | `MCP_VIDEO_DIR` | `/app/recordings`  | Directory where recordings are saved     |
 | `MCP_HTTP_PORT` | `80`               | Port for the recording HTTP API          |
+| `ODOO_BASE_URL` | `http://odoo:8069` | Base URL of the Odoo server              |
+| `ODOO_DB`       | `your_db_name`     | Odoo database name                       |
+| `ODOO_MCP_TOKEN`| `your-secret`      | Shared MCP token (optional)              |
+| `ODOO_LOGIN`    | `your_odoo_login`  | Odoo login for API access                |
+| `ODOO_API_KEY`  | `your_odoo_api_key`| Odoo API key                             |
 
 ## Files
 | File            | Description                          |
@@ -161,6 +186,7 @@ DELETE http://localhost/recordings
 | `Dockerfile`    | Container definition                 |
 | `mcp_server.py` | Browser MCP server with HTTP API     |
 | `opencode.json` | opencode configuration (you provide) |
+| `odoo_python_mcp_server` | Odoo MCP Python server          |
 
 ## Notes
 - Playwright records sessions as `.webm` files (a CDP limitation). Recordings are saved as-is — no transcoding required.
