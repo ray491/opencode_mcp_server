@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mcp_model_access_tree" model="ir.ui.view">
+        <field name="name">mcp.model.access.tree</field>
+        <field name="model">mcp.model.access</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="model_id"/>
+                <field name="can_read"/>
+                <field name="can_create"/>
+                <field name="can_write"/>
+                <field name="can_unlink"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_mcp_model_access_form" model="ir.ui.view">
+        <field name="name">mcp.model.access.form</field>
+        <field name="model">mcp.model.access</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="model_id"/>
+                        <field name="can_read"/>
+                        <field name="can_create"/>
+                        <field name="can_write"/>
+                        <field name="can_unlink"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_mcp_model_access" model="ir.actions.act_window">
+        <field name="name">MCP Access</field>
+        <field name="res_model">mcp.model.access</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p>Configure per-model MCP permissions.</p>
+        </field>
+    </record>
+
+    <menuitem id="menu_mcp_root" name="MCP" parent="base.menu_settings" groups="base.group_system"/>
+    <menuitem id="menu_mcp_access" name="Access" parent="menu_mcp_root" action="action_mcp_model_access" groups="base.group_system"/>
+</odoo>
